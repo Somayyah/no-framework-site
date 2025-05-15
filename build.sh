@@ -12,7 +12,7 @@ sass "$SRC/sass/main.scss" "$PUBLIC/css/main.css" --no-source-map
 
 echo "Compiling Pug templates..."
 pug "$SRC/html" --pretty --out "$PUBLIC/html"
-pug "$SRC/index.pug" --pretty --out "$PUBLIC/index.html"
+pug "$SRC/index.pug" --pretty --out "$PUBLIC"
 
 echo "Copying JS..."
 mkdir -p "$PUBLIC/js"
