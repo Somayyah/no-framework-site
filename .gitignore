@@ -137,3 +137,5 @@ dist
 public
 public/
 src/not-yet-released/
+src/html/content/not-yet-released/
+public/html/content/not-yet-released/
