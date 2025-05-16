@@ -1,5 +1,5 @@
 {
-  "devDependencies": {
-    "pug": "^3.0.3"
+  "dependencies": {
+    "jstransformer-markdown-it": "^3.0.0"
   }
 }
