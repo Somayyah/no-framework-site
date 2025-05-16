@@ -23,3 +23,4 @@ rsync -a "$SRC/assets/" "$PUBLIC/assets/"
 
 echo "Build complete!"
 
+## python3 -m http.server 8000 -d public/
