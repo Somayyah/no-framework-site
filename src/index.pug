@@ -28,17 +28,16 @@ html(lang="en")
 
 		main
 			section
-				p
-					| Hey there!
-					| Welcome, here I write on anything comes to my mind from info-dumping to documenting my tech experiments in various fields like programming, reverse engneering and computer networking. If you like to read about how I build and break systems and learn by actually doing then you've come to the right place!
+				p Hey there!
+				p Welcome, here I write on anything comes to my mind from info-dumping to documenting my tech experiments in various fields like programming, reverse engineering and computer networking. 
+				p If you like to read about how I build and break systems and learn by actually doing then you've come to the right place!
 
-			.home-posts.list-posts
+			section.home-posts
 				h2 Posts
 				ul
-					li 
-						a(href="/posts/posts-1.html") Post 1
-					li
-						a(href="/posts/posts-2.html") Post 2
+					each i in [1,2,3,4,5]
+						li 
+							a(href=`/posts/posts-${i}.html`) Post #{i}
 
 		footer
 			p &copy; 2025 watari@techwebunraveled.xyz
