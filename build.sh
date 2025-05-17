@@ -23,7 +23,6 @@ echo "Compiling Pug templates..."
 pug "$SRC/html/content" --pretty --out "$PUBLIC/"
 pug "$SRC/index.pug" --pretty --out "$PUBLIC"
 pug "$SRC/404.pug" --pretty --out "$PUBLIC"
-pug "$SRC/layout.pug" --pretty --out "$PUBLIC"
 
 echo "Copying JS..."
 if [ "$(find "$SRC/js" -maxdepth 1 -name '*.js' | head -n 1)" ]; then
