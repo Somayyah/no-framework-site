@@ -5,9 +5,10 @@ set -e
 SRC="src"
 PUBLIC="public"
 
-echo "Clearing public/"
-
-rm -rf $PUBLIC
+if [ -d "$DIRECTORY" ]; then
+	echo "Clearing public/"
+	rm -rf $PUBLIC
+fi
 
 echo "Starting build..."
 
