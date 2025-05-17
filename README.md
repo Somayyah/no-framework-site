@@ -15,3 +15,7 @@ My goal is to make my site terminal browser friendly, then move into the browser
 I begin by moving the blog posts from my [site](https://www.techwebunraveled.xyz/) into this repository. I searched for ways to rendering it with pug and it seems that sadly I need to install the first package to render markdown. I tried rendering them to HTML with pandoc but they were so ugly so instead I will use filter [markdown-it](https://www.npmjs.com/package/jstransformer-markdown-it). Luckily I only need it at compile not run time.
 
 **Update** : will focus on pug completely and decide how to render MD later.
+
+## 05-17-2025
+
+Templating seems fine. I extracted the nav bar into an include and extended the layout into other pages. Things seem fine so far.
