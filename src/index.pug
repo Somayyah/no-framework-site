@@ -1,46 +1,8 @@
-doctype html
+extends layout.pug
 
-html(lang="en")
-	head
-		title Techweb Unraveled
-		meta(charset="UTF-8")
-		meta(name="viewport" content="width=device-width, initial-scale=1")
+block content
+	section
+		p Hey there!
+		p Welcome, here I write on anything comes to my mind from info-dumping to documenting my tech experiments in various fields like programming, reverse engineering and computer networking. 
+		p If you like to read about how I build and break systems and learn by actually doing then you've come to the right place!
 
-	body
-		nav(role="navigation" aria-label="Main" aria-current="page")
-			a(href="/") Home
-			|   [ 
-			a(href="/posts/") Posts
-			| ] [
-			a(href="/tags/") Tags
-			| ] [
-			a(href="/projects/") Projects
-			| ] [
-			a(href="/portal/") Portal
-			| ] [
-			a(href="https://github.com/Somayyah") GitHub
-			| ] [ 
-			a(href="/side-ventures/") Side-Ventures
-			| ]
-			
-		header
-			h1 Techweb Unraveled
-			h2 One thread at a time
-
-		main
-			section
-				p Hey there!
-				p Welcome, here I write on anything comes to my mind from info-dumping to documenting my tech experiments in various fields like programming, reverse engineering and computer networking. 
-				p If you like to read about how I build and break systems and learn by actually doing then you've come to the right place!
-
-			section.home-posts
-				h2 Posts
-				ul
-					if [1,2,3,4,5].length > 0
-						each i in [1,2,3,4,5]
-							li 
-								a(href=`/posts/posts-${i}.html`) Post #{i}
-					else
-						p no posts yet
-		footer
-			p &copy; 2025 watari@techwebunraveled.xyz

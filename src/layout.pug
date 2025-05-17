@@ -7,35 +7,24 @@ html(lang="en")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
 
 	body
-		nav
-			a.nav-brand(href="/") Techweb Unraveled
-			ul
-				li
-					a(href="/posts/") Posts
-				li
-					a(href="/tags/") Tags
-				li
-					a(href="/projects/") Projects
-				li
-					a(href="/portal/") Portal
-				li
-					a(href="https://github.com/Somayyah") GitHub
-				li
-					a(href="/side-ventures/") Side-Ventures
+		
+		include html/includes/nav
+
 		header
 			h1 Techweb Unraveled
-			h2 One thread at the time
+			h2 One thread at a time
 
 		main
-			section
-
+			block content
+			
 			section.home-posts
 				h2 Posts
 				ul
-					each i in [1,2,3,4,5]
-						li 
-							a(href=`/posts/posts-${i}.html`) Post #{i}
+					if [1,2,3,4,5].length > 0
+						each i in [1,2,3,4,5]
+							li 
+								a(href=`/posts/posts-${i}.html`) Post #{i}
 					else
 						p no posts yet
-		footer
-			p &copy; 2025 watari@techwebunraveled.xyz
+		
+		include html/includes/footer
