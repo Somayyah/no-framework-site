@@ -134,10 +134,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
-public
 public/
-src/not-yet-released/
 src/html/content/not-yet-released/
-public/html/content/not-yet-released/
 node_modules/
 src/html/content/not-yet-released/

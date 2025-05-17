@@ -2,21 +2,32 @@
 
 set -e
 
-echo "Starting build..."
-
 SRC="src"
 PUBLIC="public"
+
+echo "Clearing public/"
+
+rm -rf $PUBLIC
+
+echo "Starting build..."
+
+for toplevel in portal posts projects side-ventures; do
+	mkdir -p $PUBLIC/$type/
+done
 
 echo "Compiling SASS..."
 sass "$SRC/sass/main.scss" "$PUBLIC/css/main.css" --no-source-map
 
 echo "Compiling Pug templates..."
-pug "$SRC/html" --pretty --out "$PUBLIC/html"
+pug "$SRC/html/content" --pretty --out "$PUBLIC/"
 pug "$SRC/index.pug" --pretty --out "$PUBLIC"
 
 echo "Copying JS..."
-mkdir -p "$PUBLIC/js"
-cp "$SRC/js/"*.js "$PUBLIC/js/"
+if [ "$(find "$SRC/js" -maxdepth 1 -name '*.js' | head -n 1)" ]; then
+  cp "$SRC/js"/*.js "$PUBLIC/js/"
+fi
+
+cp "$SRC/index.js" "$PUBLIC/"
 
 echo "Copying assets..."
 rsync -a "$SRC/assets/" "$PUBLIC/assets/"
