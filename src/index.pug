@@ -7,21 +7,22 @@ html(lang="en")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
 
 	body
-		nav
-			a.nav-brand(href="/") Techweb Unraveled
-			ul
-				li
-					a(href="/posts/") Posts
-				li
-					a(href="/tags/") Tags
-				li
-					a(href="/projects/") Projects
-				li
-					a(href="/portal/") Portal
-				li
-					a(href="https://github.com/Somayyah") GitHub
-				li
-					a(href="/side-ventures/") Side-Ventures
+		nav(role="navigation" aria-label="Main")
+			a(href="/") Home
+			|   [ 
+			a(href="/posts/") Posts
+			| ] [
+			a(href="/tags/") Tags
+			| ] [
+			a(href="/projects/") Projects
+			| ] [
+			a(href="/portal/") Portal
+			| ] [
+			a(href="https://github.com/Somayyah") GitHub
+			| ] [ 
+			a(href="/side-ventures/") Side-Ventures
+			| ]
+			
 		header
 			h1 Techweb Unraveled
 			h2 One thread at the time
@@ -38,6 +39,7 @@ html(lang="en")
 					each i in [1,2,3,4,5]
 						li 
 							a(href=`/posts/posts-${i}.html`) Post #{i}
-
+					else
+						p no posts yet
 		footer
 			p &copy; 2025 watari@techwebunraveled.xyz

@@ -1,29 +1,41 @@
 doctype html
+
 html(lang="en")
-  head
-    meta(charset="UTF-8")
-    title Firmware Oddities
-  body
-    header
-      h1 Firmware Oddities 
-      nav(aria-label="Main Navigation")
-        ul
-          li
-            a(href="index.html") Home
-          li 
-            a(href="Posts.html") Posts
-          li 
-            a(href="tags.html") Tags 
-          li 
-            a(href="projects.html") Projects 
-          li 
-            a(href="portal") Portal 
-          li 
-            a(href="https://github.com/Somayyah") Github 
-          li 
-            a(href="side-ventures.html") Side ventures
-          li 
-            button light2dark
-    block content
-    footer
-      p © 2025 watari@techwebunraveled.xyz
+	head
+		title Techweb Unraveled
+		meta(charset="UTF-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+
+	body
+		nav
+			a.nav-brand(href="/") Techweb Unraveled
+			ul
+				li
+					a(href="/posts/") Posts
+				li
+					a(href="/tags/") Tags
+				li
+					a(href="/projects/") Projects
+				li
+					a(href="/portal/") Portal
+				li
+					a(href="https://github.com/Somayyah") GitHub
+				li
+					a(href="/side-ventures/") Side-Ventures
+		header
+			h1 Techweb Unraveled
+			h2 One thread at the time
+
+		main
+			section
+
+			section.home-posts
+				h2 Posts
+				ul
+					each i in [1,2,3,4,5]
+						li 
+							a(href=`/posts/posts-${i}.html`) Post #{i}
+					else
+						p no posts yet
+		footer
+			p &copy; 2025 watari@techwebunraveled.xyz
