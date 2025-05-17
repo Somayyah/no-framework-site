@@ -11,8 +11,8 @@ rm -rf $PUBLIC
 
 echo "Starting build..."
 
-for toplevel in portal posts projects side-ventures; do
-	mkdir -p $PUBLIC/$type/
+for toplevel in js portal posts projects side-ventures; do
+	mkdir -p $PUBLIC/$toplevel/
 done
 
 echo "Compiling SASS..."
@@ -21,6 +21,8 @@ sass "$SRC/sass/main.scss" "$PUBLIC/css/main.css" --no-source-map
 echo "Compiling Pug templates..."
 pug "$SRC/html/content" --pretty --out "$PUBLIC/"
 pug "$SRC/index.pug" --pretty --out "$PUBLIC"
+pug "$SRC/404.pug" --pretty --out "$PUBLIC"
+pug "$SRC/layout.pug" --pretty --out "$PUBLIC"
 
 echo "Copying JS..."
 if [ "$(find "$SRC/js" -maxdepth 1 -name '*.js' | head -n 1)" ]; then
