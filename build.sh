@@ -5,7 +5,7 @@ set -e
 SRC="src"
 PUBLIC="public"
 
-if [ -d "$DIRECTORY" ]; then
+if [ -d "$PUBLIC" ]; then
 	echo "Clearing public/"
 	rm -rf $PUBLIC
 fi
