@@ -1,14 +1,9 @@
-extends ../../layout
+extends ../../layout.pug
+
+block vars
 
 block content
-	block title
-		h1 NOTHING YET
-
-	block publish_date
-		p Jan, 1, 1111
-
-	block article
-		article Default article content
-
-	block author
-		p Default author
+  h1= title
+  p= publishDate
+  article= content
+  footer= author

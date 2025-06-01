@@ -1,15 +1,16 @@
 doctype html
 
 html(lang="en")
+	block vars
+
 	head
-		title Techweb Unraveled
+		title= title || "Techweb Unraveled"
 		meta(charset="UTF-8")
 		meta(name="viewport" content="width=device-width, initial-scale=1")
 
 	body
 		
 		include html/includes/nav
-
 		block header
 		
 		main
