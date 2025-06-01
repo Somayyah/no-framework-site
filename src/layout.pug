@@ -15,15 +15,5 @@ html(lang="en")
 		
 		main
 			block content
-			
-			section.home-posts
-				h2 Posts
-				ul
-					if [1,2,3,4,5].length > 0
-						each i in [1,2,3,4,5]
-							li 
-								a(href=`/posts/posts-${i}.html`) Post #{i}
-					else
-						p no posts yet
-		
+					
 		include html/includes/footer
