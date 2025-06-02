@@ -19,6 +19,8 @@ done
 echo "Compiling SASS..."
 sass "$SRC/sass/main.scss" "$PUBLIC/css/main.css" --no-source-map
 
+## Should I get the title list here?
+
 echo "Compiling Pug templates..."
 pug "$SRC/html/content" --pretty --out "$PUBLIC/"
 pug "$SRC/index.pug" --pretty --out "$PUBLIC"
