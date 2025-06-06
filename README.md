@@ -25,3 +25,7 @@ Navigation seems good. What's needed now is to list the titles inside each secti
 Fetched the files from each directory into the files object. Now we need to inject it into pug somehow.
 
 From [pugjs](https://pugjs.org/api/getting-started.html) we need to install the pug module because it's not native to node, which will create package.json file.
+
+## 06-07-2025
+
+Testing [marked.js](https://marked.js.org/) to convert my MD posts into content
