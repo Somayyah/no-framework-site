@@ -2,7 +2,10 @@ extends ../../../layout
 
 block vars
 	- var title = "Posts"
-
+	
 block content
 	h1 posts
 	p Here you can see my posts in chronological order
+	ul
+		each file in list
+			li: a(href=`/posts/${file}`) #{file}

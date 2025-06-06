@@ -6,3 +6,6 @@ block vars
 block content
 	h1 Tags
 	p Search posts by tags and topics!!
+	ul
+		each file in list
+			li: a(href=`/posts/${file}`) #{file}

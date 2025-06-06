@@ -6,3 +6,6 @@ block vars
 block content
 	h1 Side Ventures
 	p Here I write about things other than IT
+	ul
+		each file in list
+			li: a(href=`/side-ventures/${file}`) #{file}

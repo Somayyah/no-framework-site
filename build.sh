@@ -19,14 +19,24 @@ done
 echo "Compiling SASS..."
 sass "$SRC/sass/main.scss" "$PUBLIC/css/main.css" --no-source-map
 
-## Should I get the title list here?
-
-# node build.js
-
 echo "Compiling Pug templates..."
-pug "$SRC/html/content" --pretty --out "$PUBLIC/"
+
+for i in side-ventures portal posts projects tags not-yet-released; do
+	for file in "$SRC/html/content/$i"/*.pug; do
+		base=$(basename "$file")
+		if [[ "$base" != "$i.pug" ]]; then
+			pug "$file" --pretty --out "${PUBLIC}/${i}/"
+		fi
+	done
+done
+
+# pug "$SRC/html/content/" --pretty --out "$PUBLIC/"
 pug "$SRC/index.pug" --pretty --out "$PUBLIC"
 pug "$SRC/404.pug" --pretty --out "$PUBLIC"
+
+## Should I get the title list here?
+
+node build.js
 
 echo "Copying JS..."
 if [ "$(find "$SRC/js" -maxdepth 1 -name '*.js' | head -n 1)" ]; then

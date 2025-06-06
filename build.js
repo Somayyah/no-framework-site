@@ -1,7 +1,8 @@
 const fs = require("fs");
+const pug = require('pug');
 
 const path = "src/html/content/";
-
+const dist = "public/"
 const dirs = ["not-yet-released", "posts", "portal", "projects", "side-ventures", "tags"];
 
 let	files = {
@@ -25,9 +26,18 @@ for (let i = 0; i < dirs.length; i++) {
 			files[dir].push(files_list[j].replace(".pug", ".html"));
 	}
 	completed++;
-	console.log("%s : %s\n", dir , files[dir])
 	if (completed === dirs.length) {
 		// This way I won't need promises or awaits
+		for (let k = 0; k < dirs.length ; k ++)
+		{
+			const html = pug.renderFile(
+				path + dirs[k] + '/' + dirs[k] + ".pug", 
+				{ list: files[dirs[k]]}
+			);
+			
+			fs.mkdirSync(dist + dirs[k], { recursive: true });
+			fs.writeFileSync(dist +  dirs[k] + '/' + dirs[k] + ".html", html);
+		}
     }
   });
 }

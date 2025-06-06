@@ -6,3 +6,6 @@ block vars
 block content
 	h1 Projects
 	p Here are my projects
+	ul
+		each file in list
+			li: a(href=`/projects/${file}`) #{file}

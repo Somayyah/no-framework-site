@@ -5,4 +5,6 @@ block vars
 
 block content
 	h1 Soon :)
-	p I don't have a plan yet
+	ul
+		each file in list
+			li: a(href=`/posts/${file}`) #{file}

@@ -19,3 +19,9 @@ I begin by moving the blog posts from my [site](https://www.techwebunraveled.xyz
 ## 06-01-2025
 
 Navigation seems good. What's needed now is to list the titles inside each section.
+
+## 06-06-2025
+
+Fetched the files from each directory into the files object. Now we need to inject it into pug somehow.
+
+From [pugjs](https://pugjs.org/api/getting-started.html) we need to install the pug module because it's not native to node, which will create package.json file.
