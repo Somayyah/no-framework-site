@@ -41,7 +41,7 @@ for i in side-ventures portal posts projects; do
 	for file in "${TMP_REPO}"/"${i}"/*; do
 		#base="$(basename "$file")"
 		
-		DEST="${SRC}/html/content/${i}/"
+		DEST="${PUBLIC}/${i}/"
 		## Processing goes here
 		#echo "${DEST}${base}"
 		node MD2HTML.js "${file}" "${DEST}"
@@ -74,4 +74,4 @@ rsync -a "$SRC/assets/" "$PUBLIC/assets/"
 
 echo "Build complete!"
 
-# python3 -m http.server 8000 -d public/
+python3 -m http.server 8000 -d public/
