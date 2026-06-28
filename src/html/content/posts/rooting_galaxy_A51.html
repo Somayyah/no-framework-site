@@ -1,0 +1,69 @@
+<hr />
+<p>title: "Android || Rooting an android galaxy A51 phone"
+date: 1995-09-26
+description: Following the XDA guide "Galaxy A51 Root || Unlock Bootloader || Flash Official Firmware"
+type: "post"</p>
+<h2 id="tagsandroidlinuxmobilephonesecurityhowto">tags: ["android", "linux", "mobile phone security", "how-to"]</h2>
+<p>My old android phone is no longer serving me, and I replaced it's broken screen so many times I could have saved for a new one by now, so I decided to turn this zombie into my own guinea pig. It's model is <a href="https://www.gsmarena.com/samsung_galaxy_a51-9963.php">Samsung Galaxy A51</a>, and I found this <a href="https://xdaforums.com/t/galaxy-a51-root-unlock-bootloader-flash-official-firmware-binary-3-may.4053065/">guide</a> which I will be following today.</p>
+<p><strong>Disclaimer #1:</strong> This is my first time ever unlocking an android phone, so expect some inaccuracies and educational guesses along the way.</p>
+<p><strong>Disclaimer #2:</strong> I bricked my device multiple times throughout this process but it's ok becuase my phone is no longer in use, in this post I only show the successful and final result, however you may need to exercise caution so you don't lose your phone.</p>
+<h2 id="whatweneed">What we need</h2>
+<p>The tutorial seems to be written for Windows so no Linux today but that's alright. We also need to install:</p>
+<ul>
+<li><a href="https://dl2018.sammobile.com/Odin3-v3.14.1.zip">Odin v3.14.1</a></li>
+<li><a href="https://developer.samsung.com/galaxy/others/android-usb-driver-for-windows">Samsung Latest USB Driver</a></li>
+<li>Samsung firmware, the instructions says to install either <a href="https://samfirmtool.com/samfirm-v0-4-1">Samfirm 0.4.1</a> or <a href="https://github.com/wssyncmldm/frija/releases">Frija 1.4.2</a>, I will go with SamFirm.</li>
+<li>Microsoft Visual C++ 2010 Redistributable Package) and (Microsoft Visual C++ 2008 Redistributable Package.</li>
+</ul>
+<h2 id="installingthefirmware">Installing the Firmware</h2>
+<p>I used Frija to install the firmware like below:</p>
+<p><img src="image.png" alt="A screenshot of Frija, after entering the Samsung model, region and IMEI it detected the stock firmware successfully" /></p>
+<p>It takes a while for the firmware to download. </p>
+<p><br><br>
+Find the list of Samsung CSC <a href="https://technastic.com/samsung-csc-codes-list/">here</a></p>
+<h2 id="preparingtheotherstuff">Preparing the other stuff</h2>
+<p>First, I need to install the <a href="https://developer.samsung.com/galaxy/others/android-usb-driver-for-windows">Samsung Latest USB Driver</a>, which is only necessary for windows. Then I install Odin and Samfirm, then I made sure that my device is detected on windows which wasn't easy because I'm running a VBox machine. If you're encountering a similar problem, here's what I did to fix it:</p>
+<ul>
+<li>Install windows VBox guest additions.</li>
+<li>Install VBox extentions pack.</li>
+<li>Make sure that DKMS is installed on the Fedora host machine.</li>
+<li>Enable USB 2 on VBox machine settings.</li>
+<li>Use a proper USB, and verify that the phone is connected to the host using the command "adb devices"</li>
+<li>Reloading the host after previous changes.</li>
+</ul>
+<p>Since now we have everything ready, will proceed with the actual steps.</p>
+<h2 id="proceed">Proceed..</h2>
+<p>We follow the below steps on our android phone to unlock bootloader:</p>
+<h3 id="unlockingoem">Unlocking OEM</h3>
+<ul>
+<li>Go to Settings then to About phone &gt; System insformation and find your build number.</li>
+<li>Tap on your build number 6 times until you see “You’re now a developer”.</li>
+<li>Go in Developer options &gt; enable OEM unlocking.</li>
+<li>Connect the device to your PC.</li>
+<li>Power off your device with POWER and volume DOWN and directly hold volume UP and DOWN together!</li>
+<li>Device will boot in DOWNLOAD MODE.</li>
+</ul>
+<p>Then we get a warning that our device will be bricked which is what we want, the warning not the bricking.</p>
+<ul>
+<li>Long press volume UP to unlock the bootloader. This will wipe your data and automatically reboot your device. This step took a LOOOOOOOOOOOOOOOOONG time I thought it's gonna fail, the screen displayed SAMSUNG logo for a while before anything. So we need to be patient.</li>
+</ul>
+<h3 id="torootourdevice">To root Our device</h3>
+<p>In the document we get a warning that Saumsung Knox will be affected but I'm not worried right now so will proceed with below:</p>
+<ul>
+<li>Download the latest stock firmware for your Samsung Galaxy A51 with Samfirm/Frija app (faster) or Samfrew/Sam-mobile website (way slower).</li>
+<li>Extract the SM-A515XX<em>1</em>EXAMPLE<em>0000000000</em>fac.zip file with 7zip or any other unzipper.</li>
+<li>Copy the (AP<em>A515XXXXU1XXXX</em>CL00000000<em>QB00000000</em>REV00<em>user</em>low<em>ship</em>MULTI<em>CERT</em>meta_OS10.tar.md5) file and transfer it to your internal storage. </li>
+<li>Download and install <a href="https://github.com/topjohnwu/Magisk/releases/download/manager-v7.5.1/MagiskManager-v7.5.1.apk">Magisk Manager APK</a></li>
+<li>Open Magisk Manager and go to Install &gt; Install &gt; Select and Patch a file.</li>
+<li>Navigate through the storage and select the extracted AP file. The firmware will be patched and will be found in Internal Storage/Download/magisk_patched.tar</li>
+<li>Transfer the patched file to your PC.</li>
+<li>Turn OFF your device and boot into DOWNLOAD MODE.</li>
+<li>In Odin, click on AP and select the patched tar file, Uncheck “Auto Reboot” and click on Install.</li>
+</ul>
+<p>The tool will flash Magisk V20 on your Samsung Galaxy A51.</p>
+<p>To boot in recovery or boot the system with Magisk installed:</p>
+<ol>
+<li>Powering up normally → System without Magisk</li>
+<li>Power + Volume Up → Bootloader warning → Release all buttons → System with Magisk</li>
+<li>Power + Volume Up → Bootloader warning → Keep holding volume up → Actual recovery</li>
+</ol>

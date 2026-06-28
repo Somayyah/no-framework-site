@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -e
-
+shopt -s nullglob 
 SRC="src"
 PUBLIC="public"
 
@@ -17,22 +17,46 @@ for toplevel in js portal posts projects side-ventures; do
 done
 
 echo "Compiling SASS..."
-sass "$SRC/sass/main.scss" "$PUBLIC/css/main.css" --no-source-map
+npx sass "$SRC/sass/main.scss" "$PUBLIC/css/main.css" --no-source-map
+
+# Fetch content of github.com/somayyah/content.git
+
+GHRepo="https://www.github.com/somayyah/content.git"
+TMP_REPO="/tmp/content-repo"
+
+if [ -d "$TMP_REPO" ]; then
+	echo "Updating existing content repository"
+	cd "$TMP_REPO" && git pull && cd -
+else
+	echo "Cloning content repository"
+	git clone "$GHRepo" "$TMP_REPO"
+fi
+
 
 echo "Compiling Pug templates..."
 
-for i in side-ventures portal posts projects tags not-yet-released; do
+for i in side-ventures portal posts projects; do
+
+	# In each i dir in /tmp/content-repo process MD into HTML and copy into "$SRC/html/content/$i"
+	for file in "${TMP_REPO}"/"${i}"/*; do
+		#base="$(basename "$file")"
+		
+		DEST="${SRC}/html/content/${i}/"
+		## Processing goes here
+		#echo "${DEST}${base}"
+		node MD2HTML.js "${file}" "${DEST}"
+	done
 	for file in "$SRC/html/content/$i"/*.pug; do
 		base=$(basename "$file")
 		if [[ "$base" != "$i.pug" ]]; then
-			pug "$file" --pretty --out "${PUBLIC}/${i}/"
+			npx pug "$file" --pretty --out "${PUBLIC}/${i}/"
 		fi
 	done
 done
 
 # pug "$SRC/html/content/" --pretty --out "$PUBLIC/"
-pug "$SRC/index.pug" --pretty --out "$PUBLIC"
-pug "$SRC/404.pug" --pretty --out "$PUBLIC"
+npx pug "$SRC/index.pug" --pretty --out "$PUBLIC"
+npx pug "$SRC/404.pug" --pretty --out "$PUBLIC"
 
 ## Should I get the title list here?
 
@@ -50,4 +74,4 @@ rsync -a "$SRC/assets/" "$PUBLIC/assets/"
 
 echo "Build complete!"
 
-## python3 -m http.server 8000 -d public/
+# python3 -m http.server 8000 -d public/

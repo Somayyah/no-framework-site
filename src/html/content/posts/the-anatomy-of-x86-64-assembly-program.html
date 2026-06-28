@@ -1,0 +1,147 @@
+<hr />
+<p>title: "The anatomy of x86-64 assembly program"
+date: 2025-02-05
+description: x86-64 for newbies 
+type: "post"</p>
+<h2 id="tagsx8664reverseengineeringassemblyoperatingsystems">tags: ["x86-64", "reverse-engineering", "assembly", "operating systems"]</h2>
+<blockquote>
+  <p>Rest of the RE posts can be viewed <a href="https://techwebunraveled.xyz/tags/reverse-engineering/"><strong>here</strong></a>.</p>
+</blockquote>
+<p>Today we'll talk about the sections of assembly program and we'll use it to write a simple "Hello, World!" application. We'll focus on x86-64 architecture but generally same applies to ARM.</p>
+<h2 id="thegeneralstructureofassemblyprogram">The General Structure of Assembly program</h2>
+<p>Generally, a <strong>x86-64</strong> assembly program consists of these sections:</p>
+<pre><code class="assembly language-assembly">.global _start
+.intel_syntax noprefix
+
+.section .text
+_start:    
+
+.section .data
+
+.section .bss 
+</code></pre>
+<p>The program contains 4 main sections:</p>
+<ul>
+<li><strong>Global section</strong>: Identifies the entry point, _start in our case.</li>
+<li><strong>Text section</strong>: Contains the actual code instructions.</li>
+<li><strong>Data section</strong>: Holds <strong>initialized</strong> variables.</li>
+<li><strong>BSS section</strong>: Holds <strong>uninitialized</strong> variables.</li>
+</ul>
+<h2 id="theglobalsection">The Global Section</h2>
+<p>To execute a program we need an entrypoint to start with (similar to main in C), which is what the first line for. The general syntax is:</p>
+<pre><code class="assembly language-assembly">.global &lt;entry point label&gt;
+</code></pre>
+<p>You don't have to use <em>start and "</em>" isn't mandatory, however the convention is to use an underscore for system-related or special symbols.</p>
+<p>As to the second line, assembly follows two main syntax styles, intel syntax and AT&amp;T Syntax with some differences between each other, <a href="https://imada.sdu.dk/u/kslarsen/dm546/Material/IntelnATT.htm">ref</a>, I'll be using the intel syntax by adding:</p>
+<pre><code class="assembly language-assembly">.intel_syntax noprefix
+</code></pre>
+<p>The <em>noprefix</em> keyword is so we don't use the prefix '%' which makes writing the code easier, the abscence of the above directive changes the syntax style to AT&amp;T style, so instead of:</p>
+<pre><code class="assembly language-assembly">.intel_syntax noprefix
+mov eax, 1 ; Intel style were destination before the source and % isn't used
+</code></pre>
+<p>We get:</p>
+<pre><code class="assembly language-assembly">mov $1, %eax   // notice the prefix % is added to the register name and the source preceeds the destination
+</code></pre>
+<h2 id="thetextsection">The TEXT Section</h2>
+<p>In the <code>.text</code> section, we modify registers and write the actual instructions and syscalls which we will talk about later. To print something to the standard output we can take advantage of the sys_write syscall, which is easy to translate to assembly by following the <a href="https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/">syscall table</a>, let's take a look at it's elements:</p>
+<p>| %rax | System call | %rdi            | %rsi            | %rdx         | %r10 | %r8 | %r9 |
+|------|-------------|-----------------|-----------------|-------------|------|----|----|
+| 1    | sys<em>write   | unsigned int fd | const char *buf | size</em>t count |      |    |    |</p>
+<p>The assembly code corresponding to the <code>sys_write</code> syscall is:</p>
+<pre><code class="assembly language-assembly">mov rax, 1               // 1 = sys_write (this tells Linux we want to write)
+mov rdi, 1               // File descriptor: 1 (stdout)
+lea rsi, [INITIALIZED VARIABLE NAME]   // Address of the string (pointer)
+mov rdx, 14              // Number of bytes to write
+syscall                  // Perform the syscall
+</code></pre>
+<p>We use the opcode <em>mov</em> to copy (not actually move) the data into the registers, meanwhile if we want to copy and address of a variable which holds our string we use lea, in the sys_write table entry we see that rsi should have a pointer to a buffer which is how we know it requires an address to such buffer not the actual value.</p>
+<p>We end the syscall with the Opcode <em>syscall</em> to execute it. Just like in other programming languages like C, we need to exit from our code somehow, so we can use sys_exit syscall which only requires two registers!</p>
+<pre><code class="assembly language-assembly">mov rax, 60
+mov rdi, 0
+syscall
+</code></pre>
+<h2 id="thedatasection">The DATA Section</h2>
+<p>Here we declare the variables and initialize them, for example to initialize a null terminated string:</p>
+<pre><code class="assembly language-assembly">.section .data
+hello_world:
+    .asciz "Hello, World!"
+</code></pre>
+<p>It's important that the variables are initialized, and to use them we refer to their address with the instruction <code>lea</code> (load effective address).</p>
+<h2 id="thebsssection">The BSS Section</h2>
+<p>This section is also to save variables but unlike the DATA section they're not giving an initial value.</p>
+<h2 id="puttingitalltogether">Putting It All Together</h2>
+<p>Now let's use this information to print "Hello, World!" to the screen, for that we will use the syscall "sys<em>write" and "sys</em>exit" which we discussed above:</p>
+<ul>
+<li>Let's write the sections first:</li>
+</ul>
+<pre><code class="assembly language-assembly">.global _start
+.intel_syntax noprefix
+
+.section .text
+_start:
+
+.section .data
+
+.section .bss
+</code></pre>
+<ul>
+<li>Then let's create our variable to store the string "Hello, World!"</li>
+</ul>
+<pre><code>.global _start
+.intel_syntax noprefix
+
+.section .text
+_start:
+
+.section .data
+hello_world:
+    .asciz "Hello, World!\n"
+</code></pre>
+<ul>
+<li>Now we will invoke sys_write syscall to print the <strong>Hello, world!</strong> string:</li>
+</ul>
+<pre><code class="assembly language-assembly">.global _start
+.intel_syntax noprefix
+
+.section .text
+_start:    
+
+    // sys_write call    
+    mov rax, 1
+    mov rdi, 1    
+    lea rsi, [hello_world]
+    mov rdx, 14 
+    syscall
+
+    // sys_exit call to exit the program
+    mov rax, 60
+    mov rdi, 0
+    syscall
+
+.section .data
+hello_world:
+    .asciz "Hello, World!\n"
+
+.section .bss
+</code></pre>
+<h2 id="runningtheassemblycode">Running the Assembly Code</h2>
+<p>To assemble and run the code, follow these steps:</p>
+<ol>
+<li><p><strong>Assemble the source file (<code>hello-world.s</code>) into an object file (<code>hello-world.o</code>)</strong>:</p>
+<pre><code class="bash language-bash">as hello-world.s -o hello-world.o
+</code></pre></li>
+<li><p><strong>Link the object file to create an executable (<code>hello-world</code>)</strong>:</p>
+<ul>
+<li>The <code>-nostdlib</code> flag prevents linking with the standard C libraries.</li>
+<li>The <code>-static</code> flag ensures the executable is statically linked.</li></ul>
+<pre><code class="bash language-bash">gcc -o hello-world hello-world.o -nostdlib -static
+</code></pre></li>
+<li><p><strong>Run the executable to see the output</strong>:
+<code>bash
+./hello-world
+</code></p></li>
+</ol>
+<p>It's ok if you don't understand yet how these commands  work, we will explain them in a separate post.</p>
+<hr />
+<h2 id="finalthoughts">Final Thoughts</h2>
+<p>Now you have wrote your first assembly program, we are ready to move deeper into other topics and understand this language better.</p>

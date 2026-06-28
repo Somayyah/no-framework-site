@@ -1,0 +1,165 @@
+<hr />
+<p>title: "Linux permissions for files and Directories"
+date: 2025-12-21
+description:<br />
+type: "post"</p>
+<h2 id="tagslinuxunixcommandshowtotechnologyoperatingsystemskernel">tags: ["linux", "unix", "commands", "how-to", "technology", "operating systems", "kernel"]</h2>
+<p>Linux permissions are supposed to be straight forward however there are some nuances that come into play. In this post, I will dive deeper into how to set these permissions and how they differ between users, groups, files and directories, and what to take into consideration.</p>
+<h2 id="introduction">Introduction</h2>
+<h3 id="howarepermissionsrepresentedinlinux">How Are Permissions Represented in Linux</h3>
+<p><strong>skip if you're already familiar with linux permissions and how they're set up</strong></p>
+<p>Every file or directory has a set of permissions that can be viewed via a simple ls:</p>
+<pre><code class="bash language-bash">&gt; ls -l
+
+17 DESKTOP in HOME
+-rwxr-xr-x 1 root root        14640 Mar 31  2024 411toppm
+-rwxr-xr-x 1 root root           38 Apr 11  2024 7z
+-rwxr-xr-x 1 root root           39 Apr 11  2024 7za
+</code></pre>
+<p>Permissions are shown as a string of characters at the start of the listing. The first character indicates the type of file or directory (- for a regular file, d for a directory, etc.), and the remaining characters are grouped in threes, representing access for owner, group, and others, in that order.</p>
+<ul>
+<li>r : read permissions</li>
+<li>w : write permissions</li>
+<li>x : execute permissions</li>
+<li>"-" : No permission</li>
+</ul>
+<p>so "rwx" means that the file has read, write and execute, meanwhile "r-x" means it has read and execute permissions only. Permissions are grouped into three sets for user, group and others, so "-rwx--xrw-" means:</p>
+<ul>
+<li>user permissions are "rwx", read, write and execute.</li>
+<li>group permissions are "--x", only execute.</li>
+<li>other users permissions are "rw-", read and write.</li>
+</ul>
+<blockquote>
+  <blockquote>
+    <p>Note : the "x" permission bit can sometimes show as "s" or "t", for now let's focus on "x" in the execution bit</p>
+  </blockquote>
+</blockquote>
+<h3 id="howtochangelinuxpermissions">How To Change Linux Permissions</h3>
+<p>We change the permissions using the command <a href="https://linuxize.com/post/chmod-command-in-linux/">chmod</a> which uses two types of notations:</p>
+<ul>
+<li>Octal notation : Where each permission, read, write and execute is given a value, and the total permissions are the summation of these values, so "rwx" is 7, because "r" + "w" + "x" = 4 + 2 + 1 = 7, similarly:</li>
+</ul>
+<p>"r-x" = 4 + 0 + 1 = 5</p>
+<p>"--x" = 0 + 0 + 1 = 1</p>
+<p>and so on. Each set of permissions are written in this order : user, group, other. Consider the below file:</p>
+<pre><code class="bash language-bash">○ → ls -l logs
+-rw-r--r-- 1 watari watari 0 Oct 12 17:06 logs
+</code></pre>
+<p>We notice that it has read permissions to all users, but write permissions only for the owner. In octal notations this would be:</p>
+<pre><code>- User : "rw-" = 4 + 2 + 0 = 3
+- Group : "r--" = 4 + 0 + 0 = 4
+- Other : "r--" = 4 + 0 + 0 = 4
+</code></pre>
+<p>To give the full permissions "rwx" for everyone, we will use 7 because "rwx" = 4 + 2 + 1 = 7. So chmod command can be used as below:</p>
+<pre><code class="bash language-bash">○ → chmod 777 logs
+
+○ → ls -l logs
+-rwxrwxrwx 1 watari watari 0 Oct 12 17:06 logs
+</code></pre>
+<p>Here we supplied 3 sets of permissions where the user, group and other take 7 as the value.</p>
+<ul>
+<li><p>Symbolic Notation, as below:</p>
+<ul>
+<li>"u", "g", "o", "a" : To represent user, group other and "all".</li>
+<li>"+" to give permissions, "-" to remove permissions, "=" to set permissions.</li>
+<li>"r" for read, "w", for write permissions, and "x" for execute.</li></ul>
+<p>Together the chmod command will be like this:</p>
+<pre><code class="bash language-bash">chmod [uago]+[+-=]{1}[rwx]+ file
+</code></pre>
+<p>For example below file has all permissions for everyone:</p>
+<pre><code class="bash language-bash">○ → ls -l logs
+-rwxrwxrwx 1 watari watari 0 Oct 12 17:06 logs
+</code></pre>
+<p>And everyone has "rwx", to remove the read permissions for the user:</p>
+<pre><code class="bash language-bash">○ → chmod u-r logs
+
+○ → ls -l logs
+--wxrwxrwx 1 watari watari 0 Oct 12 17:06 logs
+</code></pre>
+<p>To remove the execute permissions from everyone:</p>
+<pre><code class="bash language-bash">○ → chmod a-x logs
+
+○ → ls -l logs
+-rw-rw-rw- 1 watari watari 0 Oct 12 17:06 logs
+</code></pre>
+<p>We can also chain permissions together, so if I want to give execute permissions for the user, and remove the write from everyone:</p>
+<pre><code class="bash language-bash">○ → chmod u+x,a-w logs
+
+○ → ls -l logs
+-r-xr--r-- 1 watari watari 0 Oct 12 17:06 logs
+</code></pre></li>
+</ul>
+<h2 id="whatdoesitmeantoexecuteafileoradirectory">What does it mean to execute a file or a directory?</h2>
+<p>Executing a file is straight forward, here I have a simple python script:</p>
+<pre><code class="python3 language-python3">○ → cat test.py
+#!/usr/bin/env python3
+
+print("Hello, World!!")
+</code></pre>
+<p>I can't run it right away because I don't have the execute permissions yet:</p>
+<pre><code class="bash language-bash">○ → ls -l test.py
+-rw-r--r-- 1 watari watari 48 Dec 21 10:36 test.py
+
+○ → ./test.py
+-bash: ./test.py: Permission denied
+</code></pre>
+<p>After adding x permissions to the owner:</p>
+<pre><code class="bash language-bash">○ → chmod u+x test.py
+
+○ → ./test.py
+Hello, World!!
+
+○ → ls -l test.py
+-rwxr--r-- 1 watari watari 48 Dec 21 10:36 test.py
+</code></pre>
+<p>This is easy to understand, but what about executing a directory? Let's create a testing directory and remove the execute permissions from it:</p>
+<pre><code class="bash language-bash">○ → ls -l
+
+drw-r--r--  2 watari watari  4096 Dec 21 10:46 testdir
+</code></pre>
+<p>Let's now try some operations on this directory:</p>
+<pre><code class="bash language-bash">○ → cd testdir/
+-bash: cd: testdir/: Permission denied
+
+○ → touch testdir/file
+touch: cannot touch 'testdir/file': Permission denied
+
+○ → ls testdir/
+
+&lt;Empty output because I didn't add any files here&gt;
+</code></pre>
+<p>We notice how we can ls this directory, but we can't cd into it or create files in it. In general, permission bits affect directories as below:</p>
+<ul>
+<li>Read "r" permissions are used to list the files within the directory.</li>
+<li>Write "w" permissions are used to create, rename, or delete files within the directory.</li>
+<li>Execute "x" permissions are used to change into the directory to access it.</li>
+</ul>
+<h2 id="whataboutdefaultpermissions">What about default permissions?</h2>
+<p>When I create a new file we see that it immediately has the below permissions which I didn't specify upon create:</p>
+<pre><code class="bash language-bash">○ → touch newfile
+
+○ → ls -l newfile
+-rw-r--r-- 1 watari watari 0 Dec 21 11:14 newfile
+</code></pre>
+<p>The owner has read and write bits, and everyone else only have read permissions. Why is that? this is because of the <a href="https://www.man7.org/linux/man-pages/man2/umask.2.html">umask</a> value which sets the file mode during creation. And we can print it's value as below:</p>
+<pre><code>○ → umask
+0022
+</code></pre>
+<p>But wait, why isn't it saying 644 instead? this is because it shows us the mask not the permission bits themselves. For now we will ignore the first digit in the umask output, and let's look on how to calculate the default permissions with the umask value as follows:</p>
+<ul>
+<li>For files we subtract each digit in the umask from 6, so for our test file 666 - 022 = 644, which is rw-r--r--. </li>
+<li>For directories we subtract each digit in the umask from 7, so a new directory will have the permissions 777 - 022 == 755 which means rwxr-xr-x:</li>
+</ul>
+<pre><code class="bash language-bash">○ → mkdir test_dir
+mkdir: created directory 'test_dir'
+
+○ → ls -l | grep test_dir/
+
+○ → ls -l | grep test_dir
+drwxr-xr-x  2 watari watari  4096 Dec 21 12:19 test_dir
+</code></pre>
+<ul>
+<li>0 for the user means there are no permission bits disabled, so all permissions are enabled.</li>
+<li>2 for the group and other users means </li>
+</ul>
+<p>By controlling the umask you can set default permissions for users so you don't have to do it again later.</p>

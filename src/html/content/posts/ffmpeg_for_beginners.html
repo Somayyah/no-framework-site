@@ -1,0 +1,14 @@
+<hr />
+<p>title: "ffmpeg"
+date: 1995-02-02
+description:<br />
+type: "post"</p>
+<h2 id="tagslinuxunixcommandsffmpeghowtotechnologyffmpegcodex">tags: ["linux", "unix", "commands", "ffmpeg-how-to", "technology", "ffmpeg", "codex"]</h2>
+<p><a href="https://ffmpeg.org/">FFMPEG</a> is an open source tool that comprises of a collection of libraries and tools for media processing. It's the backbone of many multimedia creation programs, and I'm forcing myself to learn it after avoiding it for a long time. Since my video creation process is almost always the same, why don't I automate it?</p>
+<h2 id="ffmpegthemaintool">FFMPEG - The Main Tool</h2>
+<p>The <code>ffmpeg</code> command follows a simple format:</p>
+<pre><code class="bash language-bash">ffmpeg [global_options] {[input_file_options] -i input_url} ... {[output_file_options] output_url}
+</code></pre>
+<p>The command I generally use is as below:</p>
+<pre><code class="bash language-bash">ffmpeg -i video.mp4 -i audio.wav -vf subtitles=file.srt output.mp4
+</code></pre>

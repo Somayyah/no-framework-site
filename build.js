@@ -3,10 +3,9 @@ const pug = require('pug');
 
 const path = "src/html/content/";
 const dist = "public/"
-const dirs = ["not-yet-released", "posts", "portal", "projects", "side-ventures", "tags"];
+const dirs = ["posts", "portal", "projects", "side-ventures", "tags"];
 
 let	files = {
-	"not-yet-released" : [],
 	"posts" : [], 
 	"portal" : [],
 	"projects" : [],
