@@ -8,4 +8,5 @@ block content
 	p Here you can see my posts in chronological order
 	ul
 		each file in list
-			li: a(href=`/posts/${file}`) #{file}
+			- var linkname = file.replace('.html', '')
+			li: a(href=`/posts/${file}`) #{linkname}

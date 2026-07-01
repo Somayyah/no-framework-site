@@ -1,0 +1,14 @@
+extends ../../../layout.pug
+block vars
+  - var title = "Projects"
+  - var date = ""
+  - var description = ""
+
+block content
+  article.post
+    h1= title
+    .meta
+      span.date Published: #{date}
+    p.description= description
+    .post-body
+      != contentHtml

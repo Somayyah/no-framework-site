@@ -1,0 +1,14 @@
+extends ../../../layout.pug
+block vars
+  - var title = "Side Ventures"
+  - var date = ""
+  - var description = "Micology, Gardening and Existential Crises"
+
+block content
+  article.post
+    h1= title
+    .meta
+      span.date Published: #{date}
+    p.description= description
+    .post-body
+      != contentHtml
